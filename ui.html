@@ -37,9 +37,10 @@
     padding-bottom: 0.5rem;
     width: 100%;
     font-size: 12px;
+    margin-top: 0;
   }
 
-  div {
+  div.flex {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -49,6 +50,7 @@
   p {
     font-size: smaller;
     color: darkslategray;
+    margin-bottom: 0.25rem;
   }
   input {
     width: 100%;
@@ -151,14 +153,53 @@
   }
 </style>
 
-<p>
-  Select a node and hit 'Select all' to find and select all instances with that
-  name for quick global adjustments or replacements
-</p>
-<button id="run" class="primary">Select all</button>
+<p>Select an element on the canvas and get all matches by clicking a button</p>
+<div class="flex">
+  <button id="name" class="primary">Name</button>
+  <button id="type" class="primary">Type</button>
+  <button id="size" class="primary">Size</button>
+</div>
+<div class="flex">
+  <button id="radius" class="primary">Radius</button>
+  <button id="strokeWeight" class="primary">Stroke</button>
+  <button id="textSize" class="primary">Text size</button>
+</div>
 
 <script>
-  document.getElementById("run").onclick = () => {
-    parent.postMessage({ pluginMessage: { type: "get-instances" } }, "*");
+  document.getElementById("name").onclick = () => {
+    parent.postMessage(
+      { pluginMessage: { type: "get-instances-by-name" } },
+      "*"
+    );
+  };
+  document.getElementById("type").onclick = () => {
+    parent.postMessage(
+      { pluginMessage: { type: "get-instances-by-type" } },
+      "*"
+    );
+  };
+  document.getElementById("size").onclick = () => {
+    parent.postMessage(
+      { pluginMessage: { type: "get-instances-by-size" } },
+      "*"
+    );
+  };
+  document.getElementById("radius").onclick = () => {
+    parent.postMessage(
+      { pluginMessage: { type: "get-instances-by-radius" } },
+      "*"
+    );
+  };
+  document.getElementById("strokeWeight").onclick = () => {
+    parent.postMessage(
+      { pluginMessage: { type: "get-instances-by-strokeWeight" } },
+      "*"
+    );
+  };
+  document.getElementById("textSize").onclick = () => {
+    parent.postMessage(
+      { pluginMessage: { type: "get-instances-by-textSize" } },
+      "*"
+    );
   };
 </script>
