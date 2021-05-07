@@ -17,6 +17,7 @@ figma.ui.onmessage = (msg) => {
       .filter((node) => node.name === nodeName);
     figma.currentPage.selection = getInstances;
     figma.notify(`${getInstances.length} "${nodeName}'s" selected`);
+    figma.closePlugin();
   }
 
   if (msg.type === "get-instances-by-type") {
@@ -35,6 +36,7 @@ figma.ui.onmessage = (msg) => {
       .filter((node) => node.type === nodeType);
     figma.currentPage.selection = getInstances;
     figma.notify(`${getInstances.length} "${nodeType}'s" selected`);
+    figma.closePlugin();
   }
 
   if (msg.type === "get-instances-by-size") {
@@ -55,6 +57,7 @@ figma.ui.onmessage = (msg) => {
       .filter((node) => node.width === nodeWidth && node.height === nodeHeight);
     figma.currentPage.selection = getInstances;
     figma.notify(`${getInstances.length} nodes selected`);
+    figma.closePlugin();
   }
 
   if (msg.type === "get-instances-by-radius") {
@@ -84,6 +87,7 @@ figma.ui.onmessage = (msg) => {
       .filter((node) => node.cornerRadius === nodeRadius);
     figma.currentPage.selection = getInstances;
     figma.notify(`${getInstances.length} nodes selected`);
+    figma.closePlugin();
   }
 
   if (msg.type === "get-instances-by-strokeWeight") {
@@ -115,6 +119,7 @@ figma.ui.onmessage = (msg) => {
       .filter((node) => node.strokeWeight === nodeStrokeWeight);
     figma.currentPage.selection = getInstances;
     figma.notify(`${getInstances.length} nodes selected`);
+    figma.closePlugin();
   }
 
   if (msg.type === "get-instances-by-textSize") {
@@ -132,5 +137,6 @@ figma.ui.onmessage = (msg) => {
       .filter((node) => node.fontSize === nodeTextSize);
     figma.currentPage.selection = getInstances;
     figma.notify(`${getInstances.length} nodes selected`);
+    figma.closePlugin();
   }
 };
