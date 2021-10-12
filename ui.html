@@ -49,6 +49,7 @@
   }
   p {
     font-size: smaller;
+    font-weight: 700;
     color: darkslategray;
     margin-bottom: 0.25rem;
   }
@@ -152,17 +153,32 @@
     color: darkslategray;
   }
 </style>
-
-<p>Select an element on the canvas and get all matches by clicking a button</p>
+<p>General</p>
 <div class="flex">
-  <button id="name" class="primary">Name</button>
-  <button id="type" class="primary">Type</button>
-  <button id="size" class="primary">Size</button>
+  <button id="name" class="secondary">Name</button>
+  <button id="type" class="secondary">Type</button>
+  <button id="strokeWeight" class="secondary">Stroke</button>
 </div>
+<p>Sizing</p>
 <div class="flex">
-  <button id="radius" class="primary">Radius</button>
-  <button id="strokeWeight" class="primary">Stroke</button>
-  <button id="textSize" class="primary">Text size</button>
+  <button id="size" class="secondary">Size</button>
+  <button id="width" class="secondary">Width</button>
+  <button id="height" class="secondary">Height</button>
+</div>
+<p>Shapes</p>
+<div class="flex">
+  <button id="radius" class="secondary">Radius</button>
+</div>
+<p>Text</p>
+<div class="flex">
+  <button id="characters" class="secondary">Characters</button>
+  <button id="textSize" class="secondary">Text size</button>
+  <button id="fontStyle" class="secondary">Text weight</button>
+</div>
+<!-- <button id="effects" class="secondary">Effects</button> -->
+<div class="flex">
+  <button id="fontName" class="secondary">Font name</button>
+  <button id="fontFamily" class="secondary">Font family</button>
 </div>
 
 <script>
@@ -184,6 +200,18 @@
       "*"
     );
   };
+  document.getElementById("width").onclick = () => {
+    parent.postMessage(
+      { pluginMessage: { type: "get-instances-by-width" } },
+      "*"
+    );
+  };
+  document.getElementById("height").onclick = () => {
+    parent.postMessage(
+      { pluginMessage: { type: "get-instances-by-height" } },
+      "*"
+    );
+  };
   document.getElementById("radius").onclick = () => {
     parent.postMessage(
       { pluginMessage: { type: "get-instances-by-radius" } },
@@ -202,4 +230,34 @@
       "*"
     );
   };
+  document.getElementById("characters").onclick = () => {
+    parent.postMessage(
+      { pluginMessage: { type: "get-instances-by-characters" } },
+      "*"
+    );
+  };
+  document.getElementById("fontName").onclick = () => {
+    parent.postMessage(
+      { pluginMessage: { type: "get-instances-by-fontName" } },
+      "*"
+    );
+  };
+  document.getElementById("fontFamily").onclick = () => {
+    parent.postMessage(
+      { pluginMessage: { type: "get-instances-by-fontFamily" } },
+      "*"
+    );
+  };
+  document.getElementById("fontStyle").onclick = () => {
+    parent.postMessage(
+      { pluginMessage: { type: "get-instances-by-fontStyle" } },
+      "*"
+    );
+  };
+  // document.getElementById("effects").onclick = () => {
+  //   parent.postMessage(
+  //     { pluginMessage: { type: "get-instances-by-effects" } },
+  //     "*"
+  //   );
+  // };
 </script>

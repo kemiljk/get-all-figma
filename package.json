@@ -8,7 +8,7 @@
   },
   "author": "",
   "license": "",
-  "dependencies": {
-    "@figma/plugin-typings": "^1.22.0"
+  "devDependencies": {
+    "@figma/plugin-typings": "^1.33.0"
   }
 }

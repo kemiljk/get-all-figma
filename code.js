@@ -1,4 +1,4 @@
-figma.showUI(__html__, { width: 300, height: 140 });
+figma.showUI(__html__, { width: 400, height: 360 });
 figma.ui.onmessage = (msg) => {
     if (msg.type === "get-instances-by-name") {
         let nodeName;
@@ -13,6 +13,7 @@ figma.ui.onmessage = (msg) => {
             .filter((node) => node.name === nodeName);
         figma.currentPage.selection = getInstances;
         figma.notify(`${getInstances.length} "${nodeName}'s" selected`);
+        figma.closePlugin();
     }
     if (msg.type === "get-instances-by-type") {
         let nodeType;
@@ -27,6 +28,7 @@ figma.ui.onmessage = (msg) => {
             .filter((node) => node.type === nodeType);
         figma.currentPage.selection = getInstances;
         figma.notify(`${getInstances.length} "${nodeType}'s" selected`);
+        figma.closePlugin();
     }
     if (msg.type === "get-instances-by-size") {
         let nodeWidth;
@@ -43,6 +45,37 @@ figma.ui.onmessage = (msg) => {
             .filter((node) => node.width === nodeWidth && node.height === nodeHeight);
         figma.currentPage.selection = getInstances;
         figma.notify(`${getInstances.length} nodes selected`);
+        figma.closePlugin();
+    }
+    if (msg.type === "get-instances-by-width") {
+        let nodeWidth;
+        let getInstances;
+        const { selection } = figma.currentPage;
+        function getInstanceByWidth() {
+            nodeWidth = selection[0].width;
+        }
+        getInstanceByWidth();
+        getInstances = figma.currentPage
+            .findAll()
+            .filter((node) => node.width === nodeWidth);
+        figma.currentPage.selection = getInstances;
+        figma.notify(`${getInstances.length} nodes selected`);
+        figma.closePlugin();
+    }
+    if (msg.type === "get-instances-by-height") {
+        let nodeHeight;
+        let getInstances;
+        const { selection } = figma.currentPage;
+        function getInstanceByHeight() {
+            nodeHeight = selection[0].height;
+        }
+        getInstanceByHeight();
+        getInstances = figma.currentPage
+            .findAll()
+            .filter((node) => node.height === nodeHeight);
+        figma.currentPage.selection = getInstances;
+        figma.notify(`${getInstances.length} nodes selected`);
+        figma.closePlugin();
     }
     if (msg.type === "get-instances-by-radius") {
         let nodeRadius;
@@ -66,9 +99,10 @@ figma.ui.onmessage = (msg) => {
         getInstanceByRadius(selection[0]);
         getInstances = figma.currentPage
             .findAll()
-            .filter((node) => node.cornerRadius === nodeRadius);
+            .filter((node) => nodetypes.includes(node.type) && node.cornerRadius === nodeRadius);
         figma.currentPage.selection = getInstances;
         figma.notify(`${getInstances.length} nodes selected`);
+        figma.closePlugin();
     }
     if (msg.type === "get-instances-by-strokeWeight") {
         let nodeStrokeWeight;
@@ -84,6 +118,10 @@ figma.ui.onmessage = (msg) => {
             "ELLIPSE",
             "RECTANGLE",
             "POLYGON",
+            "SHAPE_WITH_TEXT",
+            "STICKY",
+            "CONNECTOR",
+            "STAMP",
         ];
         const { selection } = figma.currentPage;
         function getInstanceByStrokeWeight(node) {
@@ -94,9 +132,10 @@ figma.ui.onmessage = (msg) => {
         getInstanceByStrokeWeight(selection[0]);
         getInstances = figma.currentPage
             .findAll()
-            .filter((node) => node.strokeWeight === nodeStrokeWeight);
+            .filter((node) => node.type === "TEXT" && node.strokeWeight === nodeStrokeWeight);
         figma.currentPage.selection = getInstances;
         figma.notify(`${getInstances.length} nodes selected`);
+        figma.closePlugin();
     }
     if (msg.type === "get-instances-by-textSize") {
         let nodeTextSize;
@@ -108,8 +147,111 @@ figma.ui.onmessage = (msg) => {
         getInstanceByTextSize(selection[0]);
         getInstances = figma.currentPage
             .findAll()
-            .filter((node) => node.fontSize === nodeTextSize);
+            .filter((node) => node.type === "TEXT" && node.fontSize === nodeTextSize);
         figma.currentPage.selection = getInstances;
         figma.notify(`${getInstances.length} nodes selected`);
+        figma.closePlugin();
     }
+    if (msg.type === "get-instances-by-fontName") {
+        figma.currentPage.selection.length === 0 &&
+            figma.notify("You need to select some text to continue");
+        if (figma.currentPage.selection.length === 1) {
+            let getInstances = [];
+            let selectionFont = figma.currentPage.selection[0].fontName;
+            getInstances = figma.currentPage
+                .findAll((node) => node.type === "TEXT")
+                .filter((node) => node.fontName !== figma.mixed && selectionFont !== figma.mixed
+                ? node.fontName.family === selectionFont.family &&
+                    node.fontName.style === selectionFont.style
+                : null);
+            figma.currentPage.selection = getInstances;
+            figma.notify(`${getInstances.length} ${selectionFont !== figma.mixed ? selectionFont.family : null} (${selectionFont !== figma.mixed ? selectionFont.style : null}) selected`);
+            figma.closePlugin();
+        }
+    }
+    if (msg.type === "get-instances-by-fontFamily") {
+        figma.currentPage.selection.length === 0 &&
+            figma.notify("You need to select some text to continue");
+        if (figma.currentPage.selection.length === 1) {
+            let getInstances = [];
+            let selectionFont = figma.currentPage.selection[0].fontName;
+            getInstances = figma.currentPage
+                .findAll((node) => node.type === "TEXT")
+                .filter((node) => node.fontName !== figma.mixed && selectionFont !== figma.mixed
+                ? node.fontName.family === selectionFont.family
+                : null);
+            figma.currentPage.selection = getInstances;
+            figma.notify(`${getInstances.length} ${selectionFont !== figma.mixed ? selectionFont.family : null} selected`);
+            figma.closePlugin();
+        }
+    }
+    if (msg.type === "get-instances-by-fontStyle") {
+        figma.currentPage.selection.length === 0 &&
+            figma.notify("You need to select some text to continue");
+        if (figma.currentPage.selection.length === 1) {
+            let getInstances = [];
+            let selectionFont = figma.currentPage.selection[0].fontName;
+            getInstances = figma.currentPage
+                .findAll((node) => node.type === "TEXT")
+                .filter((node) => node.fontName !== figma.mixed && selectionFont !== figma.mixed
+                ? node.fontName.style === selectionFont.style
+                : null);
+            figma.currentPage.selection = getInstances;
+            figma.notify(`${getInstances.length} ${selectionFont !== figma.mixed ? selectionFont.style : null} selected`);
+            figma.closePlugin();
+        }
+    }
+    if (msg.type === "get-instances-by-characters") {
+        const nodes = figma.currentPage.findAll();
+        let getInstances;
+        getInstances = nodes.filter((node) => node.characters ===
+            figma.currentPage.selection[0].characters &&
+            node.characters.length ===
+                figma.currentPage.selection[0].characters.length);
+        figma.currentPage.selection = getInstances;
+        figma.notify(`${getInstances.length} nodes selected`);
+        figma.closePlugin();
+    }
+    // if (msg.type === "get-instances-by-effects") {
+    //   let nodeEffects = [{}];
+    //   let getInstances;
+    //   let nodetypes = [
+    //     "FRAME",
+    //     "COMPONENT",
+    //     "INSTANCE",
+    //     "GROUP",
+    //     "VECTOR",
+    //     "LINE",
+    //     "STAR",
+    //     "ELLIPSE",
+    //     "RECTANGLE",
+    //     "POLYGON",
+    //     "TEXT",
+    //   ];
+    //   const { selection } = figma.currentPage;
+    //   async function getInstanceByEffects(node) {
+    //     nodeEffects = node.effects.map((e) =>
+    //       nodetypes.includes(node.type)
+    //         ? {
+    //             type: e.type,
+    //             color: e.color,
+    //             blendMode: e.blendMode,
+    //             offset: e.offset,
+    //             spread: e.spread,
+    //           }
+    //         : e
+    //     );
+    //     console.log(nodeEffects);
+    //   }
+    //   getInstanceByEffects(selection[0]);
+    //   getInstances = figma.currentPage
+    //     .findAll()
+    //     .filter(
+    //       (node) => nodetypes.includes(node.type) && node.effects === nodeEffects
+    //     );
+    //   console.log(getInstances);
+    //   figma.currentPage.selection = getInstances;
+    //   figma.notify(`${getInstances.length} nodes selected`);
+    //   figma.closePlugin();
+    // }
 };
