@@ -179,6 +179,7 @@
   <button id="name" class="secondary">Name</button>
   <button id="type" class="secondary">Type</button>
   <button id="strokeWeight" class="secondary">Stroke</button>
+  <button id="radius" class="secondary">Radius</button>
 </div>
 <p>Sizing</p>
 <div class="flex">
@@ -186,10 +187,21 @@
   <button id="width" class="secondary">Width</button>
   <button id="height" class="secondary">Height</button>
 </div>
-<p>Shapes</p>
+<p>Fills</p>
 <div class="flex">
-  <button id="radius" class="secondary">Radius</button>
-  <button id="fills" class="secondary">Fills</button>
+  <!-- <button id="fills" class="secondary">Fills</button> -->
+  <button id="fill-type" class="secondary">Type</button>
+  <button id="fill-visibility" class="secondary">Visibility</button>
+  <button id="fill-opacity" class="secondary">Opacity</button>
+  <button id="fill-blendMode" class="secondary">Blend mode</button>
+</div>
+<p>Strokes</p>
+<div class="flex">
+  <!-- <button id="strokes" class="secondary">Strokes</button> -->
+  <button id="stroke-type" class="secondary">Type</button>
+  <button id="stroke-visibility" class="secondary">Visibility</button>
+  <button id="stroke-opacity" class="secondary">Opacity</button>
+  <button id="stroke-blendMode" class="secondary">Blend mode</button>
 </div>
 <p>Text</p>
 <div class="flex">
@@ -202,7 +214,7 @@
   <button id="fontFamily" class="secondary">Font family</button>
   <button id="fontName" class="secondary">Family and Weight</button>
 </div>
-<div class="flex">
+<div class="flex" style="margin-top: 0.25rem">
   <select id="fontSelect"></select>
   <button
     id="findBySelect"
@@ -218,7 +230,6 @@
 
   onmessage = (event) => {
     if (event.data.pluginMessage.fontNames) {
-      fontSelect.id = "fontNames";
       event.data.pluginMessage.fontNames.forEach((font) => {
         const createOption = document.createElement("option");
         createOption.value = font;
@@ -265,9 +276,63 @@
       "*"
     );
   };
-  document.getElementById("fills").onclick = () => {
+  // document.getElementById("fills").onclick = () => {
+  //   parent.postMessage(
+  //     { pluginMessage: { type: "get-instances-by-fills" } },
+  //     "*"
+  //   );
+  // };
+  document.getElementById("fill-type").onclick = () => {
     parent.postMessage(
-      { pluginMessage: { type: "get-instances-by-fills" } },
+      { pluginMessage: { type: "get-instances-by-fillType" } },
+      "*"
+    );
+  };
+  document.getElementById("fill-visibility").onclick = () => {
+    parent.postMessage(
+      { pluginMessage: { type: "get-instances-by-fillVisibility" } },
+      "*"
+    );
+  };
+  document.getElementById("fill-opacity").onclick = () => {
+    parent.postMessage(
+      { pluginMessage: { type: "get-instances-by-fillOpacity" } },
+      "*"
+    );
+  };
+  document.getElementById("fill-blendMode").onclick = () => {
+    parent.postMessage(
+      { pluginMessage: { type: "get-instances-by-fillBlendMode" } },
+      "*"
+    );
+  };
+  // document.getElementById("strokes").onclick = () => {
+  //   parent.postMessage(
+  //     { pluginMessage: { type: "get-instances-by-strokes" } },
+  //     "*"
+  //   );
+  // };
+  document.getElementById("stroke-type").onclick = () => {
+    parent.postMessage(
+      { pluginMessage: { type: "get-instances-by-strokeType" } },
+      "*"
+    );
+  };
+  document.getElementById("stroke-visibility").onclick = () => {
+    parent.postMessage(
+      { pluginMessage: { type: "get-instances-by-strokeVisibility" } },
+      "*"
+    );
+  };
+  document.getElementById("stroke-opacity").onclick = () => {
+    parent.postMessage(
+      { pluginMessage: { type: "get-instances-by-strokeOpacity" } },
+      "*"
+    );
+  };
+  document.getElementById("stroke-blendMode").onclick = () => {
+    parent.postMessage(
+      { pluginMessage: { type: "get-instances-by-strokeBlendMode" } },
       "*"
     );
   };

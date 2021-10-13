@@ -1,4 +1,4 @@
-figma.showUI(__html__, { width: 400, height: 440 });
+figma.showUI(__html__, { width: 400, height: 520 });
 async function findAllFonts() {
     const nodes = [];
     figma.currentPage
@@ -108,21 +108,124 @@ figma.ui.onmessage = (msg) => {
         figma.currentPage.selection = getInstances;
         figma.notify(`${getInstances.length} nodes selected`);
     }
-    if (msg.type === "get-instances-by-fills") {
+    if (msg.type === "get-instances-by-fillType") {
         if (figma.currentPage.selection.length === 1) {
             let getInstances;
             const { selection } = figma.currentPage;
             const selectionFill = selection[0].fills[0];
-            const { type, color, blendMode, opacity } = selectionFill;
-            // console.log(type);
-            // console.log(color);
-            // console.log(blendMode);
-            // console.log(opacity);
+            const { type } = selectionFill;
             getInstances = figma.currentPage
-                .findAll((node) => node.fills[0].type === type)
-                .filter((node) => node.fills[0].type !== "IMAGE" && node.fills[0].type !== undefined);
+                .findAll((node) => node.fills[0])
+                .filter((node) => node.fills[0].type === type);
+            figma.currentPage.selection = getInstances;
+            figma.notify(`${getInstances.length} ${type} fill nodes selected`);
+        }
+    }
+    if (msg.type === "get-instances-by-fillVisibility") {
+        if (figma.currentPage.selection.length === 1) {
+            let getInstances;
+            const { selection } = figma.currentPage;
+            const selectionFill = selection[0].fills[0];
+            const { visible } = selectionFill;
+            getInstances = figma.currentPage
+                .findAll((node) => node.fills[0])
+                .filter((node) => node.fills[0].visible === visible);
+            figma.currentPage.selection = getInstances;
+            figma.notify(`${getInstances.length} ${visible === true ? "visible" : "hidden"} fill nodes selected`);
+        }
+    }
+    if (msg.type === "get-instances-by-fillOpacity") {
+        if (figma.currentPage.selection.length === 1) {
+            let getInstances;
+            const { selection } = figma.currentPage;
+            const selectionFill = selection[0].fills[0];
+            const { opacity } = selectionFill;
+            getInstances = figma.currentPage
+                .findAll((node) => node.fills[0])
+                .filter((node) => node.fills[0].opacity === opacity);
+            figma.currentPage.selection = getInstances;
+            figma.notify(`${getInstances.length} ${Math.round(opacity * 100)}% fill nodes selected`);
+        }
+    }
+    if (msg.type === "get-instances-by-fillBlendMode") {
+        if (figma.currentPage.selection.length === 1) {
+            let getInstances;
+            const { selection } = figma.currentPage;
+            const selectionFill = selection[0].fills[0];
+            const { blendMode } = selectionFill;
+            getInstances = figma.currentPage
+                .findAll((node) => node.fills[0])
+                .filter((node) => node.fills[0].blendMode === blendMode);
+            figma.currentPage.selection = getInstances;
+            figma.notify(`${getInstances.length} ${blendMode.replaceAll("_", " ")} fill nodes selected`);
+        }
+    }
+    if (msg.type === "get-instances-by-strokes") {
+        if (figma.currentPage.selection.length === 1) {
+            let getInstances;
+            const { selection } = figma.currentPage;
+            const selectionStroke = selection[0].strokes[0];
+            const { type, color, blendMode, opacity, visible } = selectionStroke;
+            getInstances = figma.currentPage
+                .findAll((node) => node.strokes[0])
+                .filter((node) => node.strokes[0].type === type &&
+                node.strokes[0].visible === visible &&
+                node.strokes[0].blendMode === blendMode &&
+                node.strokes[0].opacity === opacity);
             figma.currentPage.selection = getInstances;
             figma.notify(`${getInstances.length} nodes selected`);
+        }
+    }
+    if (msg.type === "get-instances-by-strokeType") {
+        if (figma.currentPage.selection.length === 1) {
+            let getInstances;
+            const { selection } = figma.currentPage;
+            const selectionStroke = selection[0].strokes[0];
+            const { type } = selectionStroke;
+            getInstances = figma.currentPage
+                .findAll((node) => node.strokes[0])
+                .filter((node) => node.strokes[0].type === type);
+            figma.currentPage.selection = getInstances;
+            figma.notify(`${getInstances.length} ${type} stroke nodes selected`);
+        }
+    }
+    if (msg.type === "get-instances-by-strokeVisibility") {
+        if (figma.currentPage.selection.length === 1) {
+            let getInstances;
+            const { selection } = figma.currentPage;
+            const selectionStroke = selection[0].strokes[0];
+            const { visible } = selectionStroke;
+            getInstances = figma.currentPage
+                .findAll((node) => node.strokes[0])
+                .filter((node) => node.strokes[0].visible === visible);
+            figma.currentPage.selection = getInstances;
+            figma.notify(`${getInstances.length} ${visible === true ? "visible" : "hidden"} stroke nodes selected`);
+        }
+    }
+    if (msg.type === "get-instances-by-strokeOpacity") {
+        if (figma.currentPage.selection.length === 1) {
+            let getInstances;
+            const { selection } = figma.currentPage;
+            const selectionStroke = selection[0].strokes[0];
+            const { opacity } = selectionStroke;
+            getInstances = figma.currentPage
+                .findAll((node) => node.strokes[0])
+                .filter((node) => node.strokes[0].opacity === opacity);
+            figma.currentPage.selection = getInstances;
+            figma.notify(`${getInstances.length} ${Math.round(opacity * 100)}% stroke nodes selected`);
+        }
+    }
+    if (msg.type === "get-instances-by-strokeBlendMode") {
+        if (figma.currentPage.selection.length === 1) {
+            let getInstances;
+            const { selection } = figma.currentPage;
+            const selectionStroke = selection[0].strokes[0];
+            const { blendMode } = selectionStroke;
+            getInstances = figma.currentPage
+                .findAll((node) => node.strokes[0])
+                .filter((node) => node.strokes[0].blendMode === blendMode);
+            figma.currentPage.selection = getInstances;
+            figma.notify(`${getInstances.length} ${blendMode.replaceAll("_", " ")} stroke nodes selected`);
         }
     }
     if (msg.type === "get-instances-by-strokeWeight") {
