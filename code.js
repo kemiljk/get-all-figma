@@ -1,4 +1,4 @@
-figma.showUI(__html__, { width: 400, height: 520 });
+figma.showUI(__html__, { width: 400, height: 610 });
 async function findAllFonts() {
     const nodes = [];
     figma.currentPage
@@ -108,6 +108,20 @@ figma.ui.onmessage = (msg) => {
         figma.currentPage.selection = getInstances;
         figma.notify(`${getInstances.length} nodes selected`);
     }
+    if (msg.type === "get-instances-by-fills") {
+        if (figma.currentPage.selection.length === 1) {
+            let getInstances;
+            const { selection } = figma.currentPage;
+            const selectionFills = selection[0].fills;
+            getInstances = figma.currentPage
+                .findAll((node) => node.fills[0].color !== undefined)
+                .filter((node) => node.fills[0].color.r === selectionFills[0].color.r &&
+                node.fills[0].color.g === selectionFills[0].color.g &&
+                node.fills[0].color.b === selectionFills[0].color.b);
+            figma.currentPage.selection = getInstances;
+            figma.notify(`${getInstances.length} fill nodes selected`);
+        }
+    }
     if (msg.type === "get-instances-by-fillType") {
         if (figma.currentPage.selection.length === 1) {
             let getInstances;
@@ -164,14 +178,12 @@ figma.ui.onmessage = (msg) => {
         if (figma.currentPage.selection.length === 1) {
             let getInstances;
             const { selection } = figma.currentPage;
-            const selectionStroke = selection[0].strokes[0];
-            const { type, color, blendMode, opacity, visible } = selectionStroke;
+            const selectionStrokes = selection[0].strokes;
             getInstances = figma.currentPage
-                .findAll((node) => node.strokes[0])
-                .filter((node) => node.strokes[0].type === type &&
-                node.strokes[0].visible === visible &&
-                node.strokes[0].blendMode === blendMode &&
-                node.strokes[0].opacity === opacity);
+                .findAll((node) => node.strokes[0] && node.strokes[0].color !== undefined)
+                .filter((node) => node.strokes[0].color.r === selectionStrokes[0].color.r &&
+                node.strokes[0].color.g === selectionStrokes[0].color.g &&
+                node.strokes[0].color.b === selectionStrokes[0].color.b);
             figma.currentPage.selection = getInstances;
             figma.notify(`${getInstances.length} nodes selected`);
         }

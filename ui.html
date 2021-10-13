@@ -189,7 +189,9 @@
 </div>
 <p>Fills</p>
 <div class="flex">
-  <!-- <button id="fills" class="secondary">Fills</button> -->
+  <button id="fills" class="secondary">Fills</button>
+</div>
+<div class="flex">
   <button id="fill-type" class="secondary">Type</button>
   <button id="fill-visibility" class="secondary">Visibility</button>
   <button id="fill-opacity" class="secondary">Opacity</button>
@@ -197,7 +199,9 @@
 </div>
 <p>Strokes</p>
 <div class="flex">
-  <!-- <button id="strokes" class="secondary">Strokes</button> -->
+  <button id="strokes" class="secondary">Strokes</button>
+</div>
+<div class="flex">
   <button id="stroke-type" class="secondary">Type</button>
   <button id="stroke-visibility" class="secondary">Visibility</button>
   <button id="stroke-opacity" class="secondary">Opacity</button>
@@ -276,12 +280,12 @@
       "*"
     );
   };
-  // document.getElementById("fills").onclick = () => {
-  //   parent.postMessage(
-  //     { pluginMessage: { type: "get-instances-by-fills" } },
-  //     "*"
-  //   );
-  // };
+  document.getElementById("fills").onclick = () => {
+    parent.postMessage(
+      { pluginMessage: { type: "get-instances-by-fills" } },
+      "*"
+    );
+  };
   document.getElementById("fill-type").onclick = () => {
     parent.postMessage(
       { pluginMessage: { type: "get-instances-by-fillType" } },
@@ -306,12 +310,12 @@
       "*"
     );
   };
-  // document.getElementById("strokes").onclick = () => {
-  //   parent.postMessage(
-  //     { pluginMessage: { type: "get-instances-by-strokes" } },
-  //     "*"
-  //   );
-  // };
+  document.getElementById("strokes").onclick = () => {
+    parent.postMessage(
+      { pluginMessage: { type: "get-instances-by-strokes" } },
+      "*"
+    );
+  };
   document.getElementById("stroke-type").onclick = () => {
     parent.postMessage(
       { pluginMessage: { type: "get-instances-by-strokeType" } },
