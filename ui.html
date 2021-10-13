@@ -74,6 +74,27 @@
   input:focus {
     border: 2px solid #17a0fb;
   }
+  select {
+    width: 100%;
+    height: 40px;
+    border-radius: 8px;
+    padding: 8px;
+    background-color: white;
+    color: #575757;
+    font-weight: 500;
+    box-shadow: none;
+    outline: none;
+    border: 2px solid #d4d6dd;
+  }
+  select:first-of-type {
+    margin-right: 0.25rem;
+  }
+  select:active {
+    border: 2px solid #17a0fb;
+  }
+  select:focus {
+    border: 2px solid #17a0fb;
+  }
   .primary {
     margin-right: 0.25rem;
     background-color: #17a0fb;
@@ -168,6 +189,7 @@
 <p>Shapes</p>
 <div class="flex">
   <button id="radius" class="secondary">Radius</button>
+  <button id="fills" class="secondary">Fills</button>
 </div>
 <p>Text</p>
 <div class="flex">
@@ -175,13 +197,38 @@
   <button id="textSize" class="secondary">Text size</button>
   <button id="fontStyle" class="secondary">Text weight</button>
 </div>
-<!-- <button id="effects" class="secondary">Effects</button> -->
+<p>Font family</p>
 <div class="flex">
-  <button id="fontName" class="secondary">Font name</button>
   <button id="fontFamily" class="secondary">Font family</button>
+  <button id="fontName" class="secondary">Family and Weight</button>
+</div>
+<div class="flex">
+  <select id="fontSelect"></select>
+  <button
+    id="findBySelect"
+    class="primary"
+    style="width: 60%; margin-right: 0.25rem"
+  >
+    Get all by font
+  </button>
 </div>
 
 <script>
+  const fontSelect = document.getElementById("fontSelect");
+
+  onmessage = (event) => {
+    if (event.data.pluginMessage.fontNames) {
+      fontSelect.id = "fontNames";
+      event.data.pluginMessage.fontNames.forEach((font) => {
+        const createOption = document.createElement("option");
+        createOption.value = font;
+        createOption.innerText = font;
+        createOption.id = font;
+        fontSelect.append(createOption);
+      });
+    }
+  };
+
   document.getElementById("name").onclick = () => {
     parent.postMessage(
       { pluginMessage: { type: "get-instances-by-name" } },
@@ -218,6 +265,12 @@
       "*"
     );
   };
+  document.getElementById("fills").onclick = () => {
+    parent.postMessage(
+      { pluginMessage: { type: "get-instances-by-fills" } },
+      "*"
+    );
+  };
   document.getElementById("strokeWeight").onclick = () => {
     parent.postMessage(
       { pluginMessage: { type: "get-instances-by-strokeWeight" } },
@@ -239,6 +292,18 @@
   document.getElementById("fontName").onclick = () => {
     parent.postMessage(
       { pluginMessage: { type: "get-instances-by-fontName" } },
+      "*"
+    );
+  };
+  document.getElementById("findBySelect").onclick = () => {
+    let pickFromSelect = fontSelect.options[fontSelect.selectedIndex].value;
+    parent.postMessage(
+      {
+        pluginMessage: {
+          type: "get-instances-by-findBySelect",
+          pickFromSelect,
+        },
+      },
       "*"
     );
   };
